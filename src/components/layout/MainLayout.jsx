@@ -1,0 +1,78 @@
+import { useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import Sidebar from '../Sidebar/Sidebar'
+import { 
+  LayoutDashboard,
+  Truck,
+  Users,
+  ClipboardList
+} from 'lucide-react'
+
+const menuItems = {
+  SKK: [
+    { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
+    { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
+    { title: 'จัดการคนยก', icon: <Users size={20} />, path: '/workers' },
+    { 
+      title: 'รายงาน',
+      icon: <ClipboardList size={20} />,
+      path: '/reports',
+      submenu: [
+        { title: 'รายงานคนยก', path: '/reports/workers' },
+        { title: 'รายงานรางจ่าย', path: '/reports/bay' },
+        { title: 'รายงานสต็อก', path: '/reports/stock' },
+        { title: 'รายงานการจ่ายปูนในรางจ่าย', path: '/reports/bay-cement' },
+        { title: 'รายงานการจ่ายปูนในสต็อก', path: '/reports/stock-cement' },
+        { title: 'รายงานการจ่ายคูปอง', path: '/reports/coupon' }
+      ]
+    }
+  ],
+  SMK: [
+    { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
+    { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
+    { title: 'จัดการคนยก', icon: <Users size={20} />, path: '/workers' },
+    {
+      title: 'รายงาน',
+      icon: <ClipboardList size={20} />,
+      path: '/reports',
+      submenu: [
+        { title: 'รายงานคนยก', path: '/reports/workers' },
+        { title: 'รายงานรถ Clamp', path: '/reports/clamp' },
+        { title: 'รายงาน Summary', path: '/reports/summary' }
+      ]
+    }
+  ]
+}
+
+const MainLayout = () => {
+  const { user, logout } = useAuth()
+  const location = useLocation()
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(window.innerWidth <= 1024)
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar 
+        user={user} 
+        onLogout={logout} 
+        items={menuItems[user.role] || []} 
+        onToggle={setIsSidebarCollapsed}
+      />
+      <main 
+        className={`flex-1 transition-all duration-300 ${
+          isSidebarCollapsed ? 'ml-16' : 'ml-64'
+        }`}
+      >
+        <div className="container mx-auto px-4 py-8">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  )
+}
+
+export default MainLayout

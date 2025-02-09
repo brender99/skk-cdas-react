@@ -10,15 +10,18 @@ import Dashboard from './pages/dashboard/Dashboard'
 import TruckStatus from './pages/trucks/TruckStatus'
 import Workers from './pages/workers/Workers'
 
-// Reports
-import WorkerReport from './pages/reports/WorkerReport'
-import BayReport from './pages/reports/BayReport'
-import StockReport from './pages/reports/StockReport'
-import BayCementReport from './pages/reports/BayCementReport'
-import StockCementReport from './pages/reports/StockCementReport'
-import CouponReport from './pages/reports/CouponReport'
-import ClampReport from './pages/reports/ClampReport'
-import SummaryReport from './pages/reports/SummaryReport'
+// Reports - SKK
+import SKKWorkerReport from './pages/reports/skk/WorkerReport'
+import SKKBayReport from './pages/reports/skk/BayReport'
+import SKKStockReport from './pages/reports/skk/StockReport'
+import SKKBayCementReport from './pages/reports/skk/BayCementReport'
+import SKKStockCementReport from './pages/reports/skk/StockCementReport'
+import SKKCouponReport from './pages/reports/skk/CouponReport'
+
+// Reports - SMK
+import SMKWorkerReport from './pages/reports/smk/WorkerReport'
+import SMKClampReport from './pages/reports/smk/ClampReport'
+import SMKSummaryReport from './pages/reports/smk/SummaryReport'
 
 const router = createBrowserRouter([
   {
@@ -48,37 +51,43 @@ const router = createBrowserRouter([
         path: '/workers',
         element: <Workers />
       },
+      // SKK Reports
       {
-        path: '/reports/workers',
-        element: <WorkerReport />
+        path: '/reports/skk/workers',
+        element: <SKKWorkerReport />
       },
       {
-        path: '/reports/bay',
-        element: <BayReport />
+        path: '/reports/skk/bay',
+        element: <SKKBayReport />
       },
       {
-        path: '/reports/stock',
-        element: <StockReport />
+        path: '/reports/skk/stock',
+        element: <SKKStockReport />
       },
       {
-        path: '/reports/bay-cement',
-        element: <BayCementReport />
+        path: '/reports/skk/bay-cement',
+        element: <SKKBayCementReport />
       },
       {
-        path: '/reports/stock-cement',
-        element: <StockCementReport />
+        path: '/reports/skk/stock-cement',
+        element: <SKKStockCementReport />
       },
       {
-        path: '/reports/coupon',
-        element: <CouponReport />
+        path: '/reports/skk/coupon',
+        element: <SKKCouponReport />
+      },
+      // SMK Reports
+      {
+        path: '/reports/smk/workers',
+        element: <SMKWorkerReport />
       },
       {
-        path: '/reports/clamp',
-        element: <ClampReport />
+        path: '/reports/smk/clamp',
+        element: <SMKClampReport />
       },
       {
-        path: '/reports/summary',
-        element: <SummaryReport />
+        path: '/reports/smk/summary',
+        element: <SMKSummaryReport />
       }
     ]
   },
@@ -104,5 +113,5 @@ export default function App() {
       />
       <Toaster position="top-right" />
     </>
-  );
+  )
 }

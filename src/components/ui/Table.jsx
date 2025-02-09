@@ -1,71 +1,79 @@
 import React from 'react'
 
-export function Table({ children, className = '' }) {
+export function Table({ children, className = '', ...props }) {
   return (
     <div className="overflow-x-auto">
-      <table className={`w-full border-collapse ${className}`}>
+      <table className={`w-full border-collapse ${className}`} {...props}>
         {children}
       </table>
     </div>
   )
 }
 
-export function Thead({ children }) {
+export function Thead({ children, className = '', ...props }) {
   return (
-    <thead>
+    <thead className={`bg-gray-50 text-xs uppercase text-navy-700 ${className}`} {...props}>
       {children}
     </thead>
   )
 }
 
-export function Tbody({ children }) {
+export function Tbody({ children, className = '', ...props }) {
   return (
-    <tbody className="divide-y divide-gray-100">
+    <tbody className={`text-sm text-navy-600 ${className}`} {...props}>
       {children}
     </tbody>
   )
 }
 
-export function Tfoot({ children }) {
+export function Tfoot({ children, className = '', ...props }) {
   return (
-    <tfoot className="border-t border-gray-200 font-medium">
+    <tfoot className={`bg-gray-50 text-xs uppercase text-navy-700 ${className}`} {...props}>
       {children}
     </tfoot>
   )
 }
 
-export function Tr({ children, className = '', isHeader = false, isEven = false }) {
+export function Tr({ children, className = '', isHeader = false, isEven = false, ...props }) {
+  const classes = [
+    'border-b border-navy-200',
+    isHeader && 'bg-navy-50 font-medium text-navy-900',
+    isEven && 'bg-navy-50/50',
+    className
+  ].filter(Boolean).join(' ')
+
   return (
-    <tr className={`
-      transition-colors duration-100
-      ${isHeader ? 'bg-[#2b4072] text-white' : isEven ? 'bg-gray-50/50' : 'bg-white'}
-      ${!isHeader && 'hover:bg-blue-50/50'}
-      ${className}
-    `}>
+    <tr className={classes} {...props}>
       {children}
     </tr>
   )
 }
 
-export function Th({ children, className = '', align = 'left' }) {
+export function Th({ children, className = '', align = 'left', ...props }) {
+  const classes = [
+    'px-4 py-3 font-medium text-navy-900 whitespace-nowrap',
+    align === 'center' && 'text-center',
+    align === 'right' && 'text-right',
+    className
+  ].filter(Boolean).join(' ')
+
   return (
-    <th className={`
-      px-6 py-4 text-sm font-semibold
-      text-${align}
-      ${className}
-    `}>
+    <th className={classes} {...props}>
       {children}
     </th>
   )
 }
 
-export function Td({ children, className = '', align = 'left' }) {
+export function Td({ children, className = '', align = 'left', ...props }) {
+  const classes = [
+    'px-4 py-3 whitespace-nowrap',
+    align === 'center' && 'text-center',
+    align === 'right' && 'text-right',
+    className
+  ].filter(Boolean).join(' ')
+
   return (
-    <td className={`
-      px-6 py-4 text-sm
-      text-${align} text-gray-600
-      ${className}
-    `}>
+    <td className={classes} {...props}>
       {children}
     </td>
   )

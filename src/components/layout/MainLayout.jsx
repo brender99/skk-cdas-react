@@ -17,14 +17,14 @@ const menuItems = {
     { 
       title: 'รายงาน',
       icon: <ClipboardList size={20} />,
-      path: '/reports',
+      path: '/reports/skk',
       submenu: [
-        { title: 'รายงานคนยก', path: '/reports/workers' },
-        { title: 'รายงานรางจ่าย', path: '/reports/bay' },
-        { title: 'รายงานสต็อก', path: '/reports/stock' },
-        { title: 'รายงานการจ่ายปูนในรางจ่าย', path: '/reports/bay-cement' },
-        { title: 'รายงานการจ่ายปูนในสต็อก', path: '/reports/stock-cement' },
-        { title: 'รายงานการจ่ายคูปอง', path: '/reports/coupon' }
+        { title: 'รายงานคนยก', path: '/reports/skk/workers' },
+        { title: 'รายงานรางจ่าย', path: '/reports/skk/bay' },
+        { title: 'รายงานสต็อก', path: '/reports/skk/stock' },
+        { title: 'รายงานการจ่ายปูนในรางจ่าย', path: '/reports/skk/bay-cement' },
+        { title: 'รายงานการจ่ายปูนในสต็อก', path: '/reports/skk/stock-cement' },
+        { title: 'รายงานการจ่ายคูปอง', path: '/reports/skk/coupon' }
       ]
     }
   ],
@@ -35,11 +35,11 @@ const menuItems = {
     {
       title: 'รายงาน',
       icon: <ClipboardList size={20} />,
-      path: '/reports',
+      path: '/reports/smk',
       submenu: [
-        { title: 'รายงานคนยก', path: '/reports/workers' },
-        { title: 'รายงานรถ Clamp', path: '/reports/clamp' },
-        { title: 'รายงาน Summary', path: '/reports/summary' }
+        { title: 'รายงานคนยก', path: '/reports/smk/workers' },
+        { title: 'รายงานรถ Clamp', path: '/reports/smk/clamp' },
+        { title: 'รายงาน Summary', path: '/reports/smk/summary' }
       ]
     }
   ]

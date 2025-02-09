@@ -7,7 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 const SMKDashboard = () => {
   const [selectedPlant, setSelectedPlant] = useState('KK1');
 
-  const { data: apiData, isLoading, isError } = useQuery({
+  const { data: apiData, isLoading, isError, error } = useQuery({
     queryKey: ['smkDashboard', selectedPlant],
     queryFn: async () => {
       const response = await axios.get(`${getApiBaseUrl()}/api/routes/dashboard.php`, {
@@ -18,24 +18,12 @@ const SMKDashboard = () => {
       });
       return response.data;
     },
-    refetchInterval: 30000
+    refetchInterval: 30000,
+    staleTime: 60000, // Consider data fresh for 1 minute
+    cacheTime: 5 * 60 * 1000, // Keep data in cache for 5 minutes
+    retry: 3, // Retry failed requests 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>
-      </div>
-    );
-  }
 
   const data = apiData?.data;
   const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
@@ -51,8 +39,23 @@ const SMKDashboard = () => {
     value: value.count
   }));
 
+  if (isLoading && !data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
+      {/* Error notification */}
+      {isError && (
+        <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+          <p className="font-medium">ไม่สามารถโหลดข้อมูลล่าสุดได้</p>
+          <p className="text-sm">กำลังแสดงข้อมูลล่าสุดที่มี {data ? '- อัพเดทล่าสุด: ' + data.lastUpdated : ''}</p>
+        </div>
+      )}
       <div className="grid grid-cols-3 items-center mb-6">
         <div>
           <h1 className="text-xl font-medium">ภาพรวมการจ่ายสินค้า - {selectedPlant}</h1>

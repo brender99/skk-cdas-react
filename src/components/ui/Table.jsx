@@ -42,8 +42,11 @@ export function Tr({ children, className = '', isHeader = false, isEven = false,
     className
   ].filter(Boolean).join(' ')
 
+  // แยก isHeader และ isEven ออกจาก props ที่จะส่งไปให้ tr element
+  const { isHeader: _, isEven: __, ...restProps } = props
+
   return (
-    <tr className={classes} {...props}>
+    <tr className={classes} {...restProps}>
       {children}
     </tr>
   )

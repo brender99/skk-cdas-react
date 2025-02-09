@@ -9,26 +9,20 @@ const mockData = [
   {
     id: 1,
     date: '2025-02-09',
-    bay: 'Bay A',
+    bay: 'Bay 1',
     cementType: 'ปูนถุง',
     incomingTons: 200,
-    incomingBags: 4000,
     outgoingTons: 150,
-    outgoingBags: 3000,
-    remainingTons: 50,
-    remainingBags: 1000
+    remainingTons: 50
   },
   {
     id: 2,
     date: '2025-02-09',
-    bay: 'Bay B',
+    bay: 'Bay 2',
     cementType: 'บิ๊กแบ็ค',
     incomingTons: 300,
-    incomingBags: 300,
     outgoingTons: 250,
-    outgoingBags: 250,
-    remainingTons: 50,
-    remainingBags: 50
+    remainingTons: 50
   }
 ]
 
@@ -58,12 +52,9 @@ export default function BayCementReport() {
               <Th>วันที่</Th>
               <Th>รางจ่าย</Th>
               <Th>ประเภทปูน</Th>
-              <Th className="text-right">รับเข้า (ตัน)</Th>
-              <Th className="text-right">รับเข้า (ถุง)</Th>
-              <Th className="text-right">จ่ายออก (ตัน)</Th>
-              <Th className="text-right">จ่ายออก (ถุง)</Th>
-              <Th className="text-right">คงเหลือ (ตัน)</Th>
-              <Th className="text-right">คงเหลือ (ถุง)</Th>
+              <Th className="text-right">ปูนเข้า (ตัน)</Th>
+              <Th className="text-right">ปูนออก (ตัน)</Th>
+              <Th className="text-right">ปูนคงเหลือ (ตัน)</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -73,11 +64,8 @@ export default function BayCementReport() {
                 <Td>{row.bay}</Td>
                 <Td>{row.cementType}</Td>
                 <Td className="text-right">{row.incomingTons.toLocaleString()}</Td>
-                <Td className="text-right">{row.incomingBags.toLocaleString()}</Td>
                 <Td className="text-right">{row.outgoingTons.toLocaleString()}</Td>
-                <Td className="text-right">{row.outgoingBags.toLocaleString()}</Td>
                 <Td className="text-right">{row.remainingTons.toLocaleString()}</Td>
-                <Td className="text-right">{row.remainingBags.toLocaleString()}</Td>
               </Tr>
             ))}
           </Tbody>
@@ -88,19 +76,10 @@ export default function BayCementReport() {
                 {mockData.reduce((sum, row) => sum + row.incomingTons, 0).toLocaleString()}
               </Td>
               <Td className="text-right font-semibold">
-                {mockData.reduce((sum, row) => sum + row.incomingBags, 0).toLocaleString()}
-              </Td>
-              <Td className="text-right font-semibold">
                 {mockData.reduce((sum, row) => sum + row.outgoingTons, 0).toLocaleString()}
               </Td>
               <Td className="text-right font-semibold">
-                {mockData.reduce((sum, row) => sum + row.outgoingBags, 0).toLocaleString()}
-              </Td>
-              <Td className="text-right font-semibold">
                 {mockData.reduce((sum, row) => sum + row.remainingTons, 0).toLocaleString()}
-              </Td>
-              <Td className="text-right font-semibold">
-                {mockData.reduce((sum, row) => sum + row.remainingBags, 0).toLocaleString()}
               </Td>
             </Tr>
           </Tfoot>

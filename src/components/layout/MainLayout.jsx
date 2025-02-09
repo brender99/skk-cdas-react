@@ -55,7 +55,7 @@ const MainLayout = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 overflow-hidden">
       <Sidebar 
         user={user} 
         onLogout={logout} 
@@ -65,9 +65,9 @@ const MainLayout = () => {
       <main 
         className={`flex-1 transition-all duration-300 ${
           isSidebarCollapsed ? 'ml-16' : 'ml-64'
-        }`}
+        } overflow-auto`}
       >
-        <div className="container mx-auto px-4 py-8">
+        <div className="w-full px-2">
           <Outlet />
         </div>
       </main>

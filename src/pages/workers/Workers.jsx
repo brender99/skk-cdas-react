@@ -5,6 +5,7 @@ import {
   CheckCircle, XCircle
 } from 'lucide-react'
 import { Table, Thead, Tbody, Tr, Th, Td } from '../../components/ui/Table'
+import { PageHeader } from '../../components/ui/PageHeader'
 
 // Mock data
 const mockWorkers = [
@@ -30,47 +31,39 @@ export default function Workers() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">
-          จัดการคนยก
-        </h1>
-        <button
-          onClick={() => setIsAdding(true)}
-          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-2"
-        >
-          <Plus size={18} />
-          เพิ่มคนยก
-        </button>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <div className="flex items-center gap-4">
+      <PageHeader
+        title="จัดการคนยก"
+        description="จัดการข้อมูลคนยกทั้งหมดในระบบ"
+        icon={Users}
+      >
+        <div className="mt-4 flex items-center gap-4">
           <div className="flex-1 relative">
-            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="ค้นหาด้วยรหัส หรือ ชื่อ-นามสกุล"
+              placeholder="ค้นหารหัสคนยก หรือ ชื่อ-นามสกุล"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          {user.role === 'SMK' && (
-            <select className="px-4 py-2 border border-gray-300 rounded-lg">
-              <option value="">ทั้งหมด</option>
-              <option value="KK1">KK1</option>
-              <option value="KK2">KK2</option>
-            </select>
-          )}
-          <select className="px-4 py-2 border border-gray-300 rounded-lg">
-            <option value="">สถานะทั้งหมด</option>
+          <select 
+            className="px-4 py-2 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            defaultValue="all"
+          >
+            <option value="all">สถานะทั้งหมด</option>
             <option value="active">ทำงาน</option>
             <option value="inactive">ไม่ทำงาน</option>
           </select>
+          <button
+            onClick={() => setIsAdding(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="h-5 w-5" />
+            เพิ่มคนยก
+          </button>
         </div>
-      </div>
+      </PageHeader>
 
       {/* Workers Table */}
       <div className="bg-white rounded-lg border border-navy-200 shadow-sm overflow-hidden">

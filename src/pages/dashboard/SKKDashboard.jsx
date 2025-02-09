@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getApiBaseUrl } from '../../utils/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LayoutDashboard } from 'lucide-react'
+import { PageHeader } from '../../components/ui/PageHeader'
 
 const SKKDashboard = () => {
   const { data: apiData, isLoading, isError, error } = useQuery({
@@ -53,7 +55,13 @@ const SKKDashboard = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="space-y-6">
+      <PageHeader
+        title="แดชบอร์ด SKK"
+        description={`ข้อมูลวันที่ ${currentDate} เวลา ${currentTime}`}
+        icon={LayoutDashboard}
+      />
+      
       {/* Error notification */}
       {isError && (
         <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
@@ -61,12 +69,6 @@ const SKKDashboard = () => {
           <p className="text-sm">กำลังแสดงข้อมูลล่าสุดที่มี {data ? '- อัพเดทล่าสุด: ' + data.lastUpdated : ''}</p>
         </div>
       )}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-medium">ภาพรวมการจ่ายสินค้า</h1>
-        <div className="text-sm text-gray-500">
-          ข้อมูลวันที่ {currentDate} เวลา {currentTime}
-        </div>
-      </div>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-3 gap-6 mb-6">

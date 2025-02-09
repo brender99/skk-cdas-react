@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getApiBaseUrl } from '../../utils/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LayoutDashboard } from 'lucide-react'
+import { PageHeader } from '../../components/ui/PageHeader'
 
 const SMKDashboard = () => {
   const [selectedPlant, setSelectedPlant] = useState('KK1');
@@ -48,49 +50,26 @@ const SMKDashboard = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="space-y-6">
+      <PageHeader
+        title={`แดชบอร์ด SMK - ${selectedPlant}`}
+        description={`ภาพรวมการจ่ายสินค้า • ${currentDate} • ${currentTime}`}
+        icon={LayoutDashboard}
+        tabs={[
+          { value: 'KK1', label: 'KK1 (ปูนถุง)' },
+          { value: 'KK2', label: 'KK2 (ปูนถุง, ปูนผง)' }
+        ]}
+        selectedTab={selectedPlant}
+        onTabChange={setSelectedPlant}
+      />
+
       {/* Error notification */}
       {isError && (
         <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
           <p className="font-medium">ไม่สามารถโหลดข้อมูลล่าสุดได้</p>
           <p className="text-sm">กำลังแสดงข้อมูลล่าสุดที่มี {data ? '- อัพเดทล่าสุด: ' + data.lastUpdated : ''}</p>
-        </div>
-      )}
-      <div className="grid grid-cols-3 items-center mb-6">
-        <div>
-          <h1 className="text-xl font-medium">ภาพรวมการจ่ายสินค้า - {selectedPlant}</h1>
-        </div>
-        {/* Plant Selection Tabs */}
-        <div className="flex justify-center">
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setSelectedPlant('KK1')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                selectedPlant === 'KK1'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              KK1 (ปูนถุง)
-            </button>
-            <button
-              onClick={() => setSelectedPlant('KK2')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                selectedPlant === 'KK2'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              KK2 (ปูนถุง, ปูนผง)
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <div className="text-sm text-gray-500">
-            ข้อมูลวันที่ {currentDate} เวลา {currentTime}
-          </div>
-        </div>
       </div>
+      )}
 
       {/* Overview Cards */}
       <div className="grid grid-cols-3 gap-6 mb-6">

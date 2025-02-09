@@ -4,6 +4,8 @@ import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { Table, Thead, Tbody, Tr, Th, Td } from '../../components/ui/Table'
 import { Search, FileText, FileSpreadsheet } from 'lucide-react'
+import { Truck } from 'lucide-react'
+import { PageHeader } from '../../components/ui/PageHeader'
 
 // Mock data - replace with API calls later
 const initialTrucks = [
@@ -58,6 +60,11 @@ export default function TruckStatus() {
 
   return (
     <div className="space-y-4">
+      <PageHeader
+        title="สถานะรถ"
+        description="แสดงข้อมูลสถานะรถทั้งหมดในระบบ"
+        icon={Truck}
+      />
       {/* Filters */}
       <div className="bg-white p-4 rounded-lg shadow space-y-4">
         <form onSubmit={handleFilter} className="space-y-4">

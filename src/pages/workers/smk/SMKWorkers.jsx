@@ -169,7 +169,7 @@ export default function SMKWorkers() {
         onClose={() => setIsAddModalOpen(false)}
         title="เพิ่มพนักงาน"
       >
-        <WorkerForm onSubmit={handleAdd} />
+        <WorkerForm onSubmit={handleAdd} defaultValues={{ company: 'SMK' }} />
       </WorkerModal>
 
       {/* Edit Modal */}

@@ -13,7 +13,7 @@ const menuItems = {
   SKK: [
     { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
     { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
-    { title: 'จัดการคนยก', icon: <Users size={20} />, path: '/workers' },
+    { title: 'จัดการพนักงาน', icon: <Users size={20} />, path: '/workers/skk' },
     { 
       title: 'รายงาน',
       icon: <ClipboardList size={20} />,
@@ -31,7 +31,7 @@ const menuItems = {
   SMK: [
     { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
     { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
-    { title: 'จัดการคนยก', icon: <Users size={20} />, path: '/workers' },
+    { title: 'จัดการพนักงาน', icon: <Users size={20} />, path: '/workers/smk' },
     {
       title: 'รายงาน',
       icon: <ClipboardList size={20} />,

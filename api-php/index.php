@@ -1,16 +1,34 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: POST, GET");
+header("Access-Control-Allow-Headers: Content-Type");
 
 // Get the request method and URI
 $request_method = $_SERVER["REQUEST_METHOD"];
 $request_uri = $_SERVER['REQUEST_URI'];
 
+// If it's an OPTIONS request, return immediately with 200 OK
+if ($request_method === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 // Remove base path from URI
-$base_path = '/api/';
+$base_path = '/api-php/';  // Changed from /api/ to /api-php/
 $path = str_replace($base_path, '', parse_url($request_uri, PHP_URL_PATH));
+
+// Include routes
+require __DIR__ . '/routes/auth.php';
+require __DIR__ . '/routes/workers.php';
+require __DIR__ . '/routes/dashboard.php';
+require __DIR__ . '/routes/user-groups.php';
+
+// Include controllers
+require __DIR__ . '/controllers/AuthController.php';
+require __DIR__ . '/controllers/WorkerController.php';
+require __DIR__ . '/controllers/DashboardController.php';
+require __DIR__ . '/controllers/UserGroupController.php';
 
 // Route the request
 switch($path) {

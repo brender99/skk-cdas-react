@@ -32,7 +32,7 @@ export default function Workers() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="จัดการคนยก"
+        title="จัดการพนักงาน"
         description="จัดการข้อมูลคนยกทั้งหมดในระบบ"
         icon={Users}
       >

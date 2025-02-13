@@ -14,22 +14,35 @@ export default function Login() {
     password: ''
   })
 
+  // Get default path based on user role
+  const getDefaultPath = (role) => {
+    switch (role) {
+      case 'SMK':
+        return '/workers/smk'
+      case 'SKK':
+        return '/workers/skk'
+      default:
+        return '/'
+    }
+  }
+
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      const from = location.state?.from?.pathname || '/'
-      navigate(from, { replace: true })
+      const defaultPath = getDefaultPath(user.role)
+      navigate(defaultPath, { replace: true })
     }
-  }, [user, navigate, location])
+  }, [user, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
     
     try {
-      await login(formData)
-      const from = location.state?.from?.pathname || '/'
-      navigate(from, { replace: true })
+      const userData = await login(formData)
+      // ใช้ role จาก response ของ login
+      const defaultPath = getDefaultPath(userData.role)
+      navigate(defaultPath, { replace: true })
       toast.success('เข้าสู่ระบบสำเร็จ')
     } catch (error) {
       toast.error(error.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')

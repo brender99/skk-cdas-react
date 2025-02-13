@@ -25,6 +25,9 @@ class DashboardController {
             // Get latest transports
             $latestTransports = $this->getLatestTransports($role, $plant);
 
+            // Get hourly stats for line chart
+            $hourlyStats = $this->getHourlyStats($role, $plant);
+
             return [
                 'success' => true,
                 'data' => [
@@ -37,9 +40,11 @@ class DashboardController {
                             'max' => floatval($timeStats['max'])
                         ],
                         'by_status' => $statusSummary,
-                        'by_product' => $productSummary
+                        'by_product' => $productSummary,
+                        'hourly_stats' => $hourlyStats['data']
                     ],
-                    'transports' => $latestTransports
+                    'transports' => $latestTransports,
+                    'debug' => $hourlyStats['debug']
                 ]
             ];
         } catch (Exception $e) {
@@ -298,7 +303,7 @@ class DashboardController {
         }
     }
 
-    private function getLatestTransports($role = 'SKK', $plant = null, $limit = 20) {
+    private function getLatestTransports($role = 'SKK', $plant = null, $limit = 10) {
         try {
             // กำหนด allowed product types ตาม role และ plant
             $allowedTypes = [];
@@ -374,6 +379,140 @@ class DashboardController {
         } catch (Exception $e) {
             error_log("Error in getLatestTransports: " . $e->getMessage());
             throw $e;
+        }
+    }
+
+    private function getHourlyStats($role = 'SKK', $plant = null) {
+        try {
+            // กำหนด allowed product types ตาม role และ plant
+            $allowedTypes = [];
+            if ($role === 'SKK') {
+                $allowedTypes = ['01', '02', '03', '09'];  // ปูนถุง, ปูนผง, บิ๊กแบ็ค, ปูนเม็ด
+            } else if ($role === 'SMK') {
+                if ($plant === 'KK1') {
+                    $allowedTypes = ['11'];  // KK1: ปูนถุงมอร์ต้าร์
+                } else if ($plant === 'KK2') {
+                    $allowedTypes = ['11', '15'];  // KK2: ปูนถุงมอร์ต้าร์, ปูนผงมอร์ต้าร์
+                }
+            }
+
+            // ถ้าไม่มี allowed types ให้ return array ว่าง
+            if (empty($allowedTypes)) {
+                return [
+                    'data' => [],
+                    'debug' => [
+                        'message' => 'No allowed types for role: ' . $role . ', plant: ' . $plant
+                    ]
+                ];
+            }
+
+            // สร้าง query แบบง่าย
+            $query = "
+                SELECT 
+                    TO_CHAR(FIRSTTAREDATE, 'HH24') as HOUR,
+                    PRODUCTTYPE,
+                    COUNT(*) as COUNT
+                FROM CDAS.TRANSPORT
+                WHERE TRUNC(BOOTHDATE) = TRUNC(SYSDATE)
+                AND FIRSTTAREDATE IS NOT NULL
+                AND PRODUCTTYPE IN (" . implode(',', array_map(function($type) { 
+                    return "'$type'"; 
+                }, $allowedTypes)) . ")
+                GROUP BY TO_CHAR(FIRSTTAREDATE, 'HH24'), PRODUCTTYPE
+                ORDER BY HOUR";
+
+            error_log("=== DEBUG INFO ===");
+            error_log("Role: " . $role);
+            error_log("Plant: " . $plant);
+            error_log("Allowed Types: " . implode(',', $allowedTypes));
+            error_log("Query: " . $query);
+            
+            $stmt = oci_parse($this->conn, $query);
+            if (!$stmt) {
+                return [
+                    'data' => [],
+                    'debug' => [
+                        'error' => 'Failed to parse query',
+                        'query' => $query,
+                        'role' => $role,
+                        'plant' => $plant,
+                        'allowedTypes' => $allowedTypes
+                    ]
+                ];
+            }
+            
+            if (!oci_execute($stmt)) {
+                $e = oci_error($stmt);
+                return [
+                    'data' => [],
+                    'debug' => [
+                        'error' => $e['message'],
+                        'query' => $query,
+                        'role' => $role,
+                        'plant' => $plant,
+                        'allowedTypes' => $allowedTypes
+                    ]
+                ];
+            }
+            
+            // สร้าง array เริ่มต้นสำหรับทุกชั่วโมง (00-23)
+            $hourlyStats = [];
+            for ($i = 0; $i < 24; $i++) {
+                $hour = str_pad($i, 2, '0', STR_PAD_LEFT);
+                $hourlyStats[$hour] = [];
+                foreach ($allowedTypes as $type) {
+                    $hourlyStats[$hour][$type] = 0;
+                }
+            }
+            
+            // เติมข้อมูลจาก database
+            while ($row = oci_fetch_assoc($stmt)) {
+                error_log("Row data: " . json_encode($row));
+                $hour = $row['HOUR'];
+                $productType = $row['PRODUCTTYPE'];
+                $count = intval($row['COUNT']);
+                
+                if (isset($hourlyStats[$hour])) {
+                    $hourlyStats[$hour][$productType] = $count;
+                }
+            }
+            
+            error_log("Hourly stats before transform: " . json_encode($hourlyStats));
+            
+            // แปลงเป็น array ที่มี hour เป็น key และ product type เป็น key ย่อย
+            $result = [];
+            foreach ($hourlyStats as $hour => $stats) {
+                $data = ['hour' => $hour];
+                foreach ($allowedTypes as $type) {
+                    $data[$type] = $stats[$type];
+                }
+                $result[] = $data;
+            }
+
+            error_log("Final result: " . json_encode($result));
+
+            return [
+                'data' => $result,
+                'debug' => [
+                    'query' => $query,
+                    'role' => $role,
+                    'plant' => $plant,
+                    'allowedTypes' => $allowedTypes
+                ]
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Error in getHourlyStats: " . $e->getMessage());
+            return [
+                'data' => [],
+                'debug' => [
+                    'error' => $e->getMessage(),
+                    'query' => $query ?? null,
+                    'role' => $role,
+                    'plant' => $plant,
+                    'allowedTypes' => $allowedTypes
+                ]
+            ];
         }
     }
 }

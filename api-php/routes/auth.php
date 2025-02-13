@@ -1,4 +1,5 @@
 <?php
+// CORS headers are now handled in index.php
 require_once '../config/database.php';
 require_once '../controllers/AuthController.php';
 

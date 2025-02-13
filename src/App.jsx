@@ -8,7 +8,8 @@ import MainLayout from './components/layout/MainLayout'
 import Login from './pages/auth/Login'
 import Dashboard from './pages/dashboard/Dashboard'
 import TruckStatus from './pages/trucks/TruckStatus'
-import Workers from './pages/workers/Workers'
+import SKKWorkers from './pages/workers/skk/SKKWorkers'
+import SMKWorkers from './pages/workers/smk/SMKWorkers'
 
 // Reports - SKK
 import SKKWorkerReport from './pages/reports/skk/WorkerReport'
@@ -47,9 +48,14 @@ const router = createBrowserRouter([
         path: '/trucks',
         element: <TruckStatus />
       },
+      // Workers
       {
-        path: '/workers',
-        element: <Workers />
+        path: '/workers/skk',
+        element: <SKKWorkers />
+      },
+      {
+        path: '/workers/smk',
+        element: <SMKWorkers />
       },
       // SKK Reports
       {
@@ -100,13 +106,13 @@ const router = createBrowserRouter([
     v7_startTransition: true,
     v7_relativeSplatPath: true
   }
-});
+})
 
 export default function App() {
   return (
     <>
       <RouterProvider 
-        router={router}
+        router={router} 
         future={{
           v7_startTransition: true
         }}

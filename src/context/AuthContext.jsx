@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, startTransition } from 'react'
+import { logout as logoutApi } from '../services/authService'
 
 const AuthContext = createContext(null)
 
@@ -37,13 +38,24 @@ export function AuthProvider({ children }) {
     startTransition(() => {
       setUser(userData)
     })
+
+    // Return user data for immediate use
+    return userData
   }
 
-  const logout = () => {
-    localStorage.removeItem('user')
-    startTransition(() => {
-      setUser(null)
-    })
+  const logout = async () => {
+    try {
+      // Call logout API
+      await logoutApi()
+    } catch (error) {
+      console.error('Error during logout:', error)
+    } finally {
+      // Always clear local state, even if API call fails
+      localStorage.removeItem('user')
+      startTransition(() => {
+        setUser(null)
+      })
+    }
   }
 
   const switchPlant = (plantId) => {
@@ -62,8 +74,15 @@ export function AuthProvider({ children }) {
     })
   }
 
+  const value = {
+    user,
+    login,
+    logout,
+    switchPlant
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, switchPlant }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )

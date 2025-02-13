@@ -1,7 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
+// CORS headers are now handled in index.php
 require_once '../config/database.php';
 require_once '../controllers/DashboardController.php';
 
@@ -20,8 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         $controller = new DashboardController($db);
         $result = $controller->getDashboardData($role, $plant);
-        
-        header('Content-Type: application/json; charset=utf-8');
         
         if ($result['success']) {
             http_response_code(200);

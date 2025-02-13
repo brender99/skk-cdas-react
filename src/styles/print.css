@@ -1,0 +1,116 @@
+@media print {
+  /* Set A3 landscape orientation */
+  @page {
+    size: A3 landscape;
+    margin: 15mm;
+  }
+
+  /* Force hide fixed sidebar */
+  div[class*="bg-gradient-to-b"],
+  div[class*="from-primary-900"],
+  div[class*="to-primary-800"],
+  div[class*="fixed"],
+  div[class*="z-50"],
+  .Sidebar_module,
+  aside,
+  nav,
+  [role="navigation"],
+  [role="complementary"] {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: static !important;
+    z-index: -9999 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+  }
+
+  /* Reset Layout */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #root,
+  .flex,
+  .min-h-screen,
+  .overflow-hidden,
+  .bg-gray-100 {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: none !important;
+  }
+
+  /* Reset main content */
+  main,
+  [class*="ml-"],
+  [class*="margin-left"],
+  .flex-1,
+  .transition-all,
+  .duration-300,
+  .overflow-auto,
+  .w-full,
+  .px-2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: static !important;
+    left: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    transition: none !important;
+  }
+
+  /* Basic table styles */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 0 auto !important;
+    page-break-inside: auto !important;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+    padding: 8px !important;
+    text-align: center !important;
+    page-break-inside: avoid !important;
+  }
+
+  th {
+    background-color: #f3f4f6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Right align numeric columns */
+  td:nth-child(3),
+  td:nth-child(4),
+  td:nth-child(5) {
+    text-align: right !important;
+  }
+
+  /* Hide unnecessary elements */
+  button,
+  .button,
+  .btn,
+  input,
+  select,
+  .filter-section,
+  .print-hide {
+    display: none !important;
+  }
+}

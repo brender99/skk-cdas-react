@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             error_log("Dashboard Error: " . ($result['message'] ?? 'Unknown error'));
         }
         
-        echo json_encode($result, JSON_UNESCAPED_UNICODE);
+        echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         
     } catch (Exception $e) {
         error_log("Dashboard Error: " . $e->getMessage());
@@ -34,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode([
             'success' => false,
             'message' => $e->getMessage()
-        ], JSON_UNESCAPED_UNICODE);
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 } else {
     http_response_code(405);
     echo json_encode([
         'success' => false,
         'message' => 'Method not allowed'
-    ], JSON_UNESCAPED_UNICODE);
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 ?>

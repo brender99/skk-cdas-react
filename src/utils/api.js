@@ -14,5 +14,5 @@ export const getApiBaseUrl = () => {
 export const buildApiUrl = (endpoint) => {
   const baseUrl = getApiBaseUrl();
   const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  return `${baseUrl}/api${path}`;
+  return `${baseUrl}/api-php${path}`;
 };

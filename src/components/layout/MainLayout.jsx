@@ -12,7 +12,7 @@ import {
 const menuItems = {
   SKK: [
     { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
-    { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
+    { title: 'ข้อมูลรถ', icon: <Truck size={20} />, path: '/trucks' },
     { title: 'จัดการพนักงาน', icon: <Users size={20} />, path: '/workers/skk' },
     { 
       title: 'รายงาน',
@@ -30,7 +30,7 @@ const menuItems = {
   ],
   SMK: [
     { title: 'แดชบอร์ด', icon: <LayoutDashboard size={20} />, path: '/' },
-    { title: 'จัดการรถ', icon: <Truck size={20} />, path: '/trucks' },
+    { title: 'ข้อมูลรถ', icon: <Truck size={20} />, path: '/trucks' },
     { title: 'จัดการพนักงาน', icon: <Users size={20} />, path: '/workers/smk' },
     {
       title: 'รายงาน',

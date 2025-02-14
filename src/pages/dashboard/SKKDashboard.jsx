@@ -13,7 +13,7 @@ const SKKDashboard = () => {
   const { data: apiData, isLoading, isError, error } = useQuery({
     queryKey: ['skkDashboard'],
     queryFn: async () => {
-      const response = await axios.get(`${getApiBaseUrl()}/api/routes/dashboard.php`, {
+      const response = await axios.get(`${getApiBaseUrl()}/api-php/routes/dashboard.php`, {
         params: { 
           role: 'SKK',
           plant: 'MAIN'  
@@ -57,20 +57,6 @@ const SKKDashboard = () => {
     }) || [];
     return transformedData;
   }, [data]);
-
-  // Add date formatting function
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    
-    // แปลง format จาก API (DDMMRRRRHH24MISS) เป็น YYYY-MM-DD HH:mm
-    const day = dateStr.substring(0, 2);
-    const month = dateStr.substring(2, 4);
-    const year = dateStr.substring(4, 8);
-    const hour = dateStr.substring(8, 10);
-    const minute = dateStr.substring(10, 12);
-    
-    return `${year}-${month}-${day} ${hour}:${minute}`;
-  };
 
   if (isLoading && !data) {
     return (
@@ -320,17 +306,17 @@ const SKKDashboard = () => {
                 <th className="px-4 py-2 text-left">จังหวัด</th>
                 <th className="px-4 py-2 text-left">สถานะ</th>
                 <th className="px-4 py-2 text-left">ประเภท</th>
-                <th className="px-4 py-2 text-left">เวลาเข้า</th>
+                <th className="px-4 py-2 text-left">เวลาจองคิว</th>
                 <th className="px-4 py-2 text-left">เวลาชั่งเบา</th>
                 <th className="px-4 py-2 text-left">เวลาชั่งหนัก</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {data?.transports?.map((truck) => (
-                <tr key={truck.booth_no} className="hover:bg-gray-50">
-                  <td className="px-4 py-2">{truck.booth_no}</td>
-                  <td className="px-4 py-2">{truck.plate_no}</td>
-                  <td className="px-4 py-2">{truck.province_name}</td>
+                <tr key={truck.card_no} className="hover:bg-gray-50">
+                  <td className="px-4 py-2">{truck.card_no || '-'}</td>
+                  <td className="px-4 py-2">{truck.plate_no || '-'}</td>
+                  <td className="px-4 py-2">{truck.province_name || '-'}</td>
                   <td className="px-4 py-2">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full
                       ${truck.status === 'จองคิว' ? 'bg-yellow-100 text-yellow-800' :
@@ -341,13 +327,13 @@ const SKKDashboard = () => {
                         'bg-indigo-100 text-indigo-800'
                       }`}
                     >
-                      {truck.status}
+                      {truck.status || '-'}
                     </span>
                   </td>
-                  <td className="px-4 py-2">{truck.product_type}</td>
-                  <td className="px-4 py-2">{formatDate(truck.booth_date)}</td>
-                  <td className="px-4 py-2">{formatDate(truck.first_tare_date)}</td>
-                  <td className="px-4 py-2">{formatDate(truck.gross_date)}</td>
+                  <td className="px-4 py-2">{truck.product_type || '-'}</td>
+                  <td className="px-4 py-2">{truck.booth_date || '-'}</td>
+                  <td className="px-4 py-2">{truck.first_tare_date || '-'}</td>
+                  <td className="px-4 py-2">{truck.gross_date || '-'}</td>
                 </tr>
               ))}
             </tbody>

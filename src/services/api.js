@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api/cdasweb',
+  baseURL: '/api-php/cdasweb',
   headers: {
     'Content-Type': 'application/json',
   },

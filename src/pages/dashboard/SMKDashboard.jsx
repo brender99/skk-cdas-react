@@ -15,7 +15,7 @@ const SMKDashboard = () => {
   const { data: apiData, isLoading, isError, error } = useQuery({
     queryKey: ['smkDashboard', selectedPlant],
     queryFn: async () => {
-      const response = await axios.get(`${getApiBaseUrl()}/api/routes/dashboard.php`, {
+      const response = await axios.get(`${getApiBaseUrl()}/api-php/routes/dashboard.php`, {
         params: { 
           role: 'SMK',
           plant: selectedPlant
@@ -37,20 +37,6 @@ const SMKDashboard = () => {
     month: 'long', 
     day: 'numeric'
   });
-
-  // Add date formatting function
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    
-    // แปลง format จาก API (DDMMRRRRHH24MISS) เป็น YYYY-MM-DD HH:mm
-    const day = dateStr.substring(0, 2);
-    const month = dateStr.substring(2, 4);
-    const year = dateStr.substring(4, 8);
-    const hour = dateStr.substring(8, 10);
-    const minute = dateStr.substring(10, 12);
-    
-    return `${year}-${month}-${day} ${hour}:${minute}`;
-  };
 
   // Transform product summary data for chart
   const productChartData = Object.entries(data?.summary?.by_product || {}).map(([key, value]) => ({
@@ -343,8 +329,8 @@ const SMKDashboard = () => {
             </thead>
             <tbody className="divide-y">
               {data?.transports?.map((truck) => (
-                <tr key={truck.booth_no} className="hover:bg-gray-50">
-                  <td className="px-4 py-2">{truck.booth_no}</td>
+                <tr key={truck.card_no} className="hover:bg-gray-50">
+                  <td className="px-4 py-2">{truck.card_no}</td>
                   <td className="px-4 py-2">{truck.plate_no}</td>
                   <td className="px-4 py-2">{truck.province_name}</td>
                   <td className="px-4 py-2">
@@ -361,9 +347,9 @@ const SMKDashboard = () => {
                     </span>
                   </td>
                   <td className="px-4 py-2">{truck.product_type}</td>
-                  <td className="px-4 py-2">{formatDate(truck.booth_date)}</td>
-                  <td className="px-4 py-2">{truck.first_tare_date ? formatDate(truck.first_tare_date) : '-'}</td>
-                  <td className="px-4 py-2">{truck.gross_date ? formatDate(truck.gross_date) : '-'}</td>
+                  <td className="px-4 py-2">{truck.booth_date}</td>
+                  <td className="px-4 py-2">{truck.first_tare_date}</td>
+                  <td className="px-4 py-2">{truck.gross_date}</td>
                 </tr>
               ))}
             </tbody>

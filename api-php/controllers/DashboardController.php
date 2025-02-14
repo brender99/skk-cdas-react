@@ -329,9 +329,9 @@ class DashboardController {
                     REPLACE(P.PROVINCEDESC, 'กรุงเทพฯ', 'กรุงเทพมหานคร') AS PROVINCE_NAME,
                     PT.PRODUCTTYPEDESC AS PRODUCT_TYPE,
                     S.STATUSDESC AS STATUS,
-                    TO_CHAR(A.BOOTHDATE, 'DDMMRRRRHH24MISS') AS BOOTHDATE,
-                    TO_CHAR(A.FIRSTTAREDATE, 'DDMMRRRRHH24MISS') AS FIRSTTAREDATE,
-                    TO_CHAR(A.GROSSDATE, 'DDMMRRRRHH24MISS') AS GROSSDATE
+                    TO_CHAR(A.BOOTHDATE, 'YYYY-MM-DD HH24:MI:SS') AS BOOTH_DATE,
+                    TO_CHAR(A.FIRSTTAREDATE, 'YYYY-MM-DD HH24:MI:SS') AS FIRST_TARE_DATE,
+                    TO_CHAR(A.GROSSDATE, 'YYYY-MM-DD HH24:MI:SS') AS GROSS_DATE
                 FROM CDAS.TRANSPORT A
                 INNER JOIN CDAS.TRUCKSTATUS S ON A.STATUS = S.TRUCKSTATUS
                 INNER JOIN CDAS.PRODUCTTYPE PT ON A.PRODUCTTYPE = PT.PRODUCTTYPE
@@ -363,15 +363,21 @@ class DashboardController {
             
             $transports = [];
             while ($row = oci_fetch_assoc($stmt)) {
+                error_log("Raw date values: " . json_encode([
+                    'BOOTH_DATE' => $row['BOOTH_DATE'],
+                    'FIRST_TARE_DATE' => $row['FIRST_TARE_DATE'],
+                    'GROSS_DATE' => $row['GROSS_DATE']
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                
                 $transports[] = [
-                    'booth_no' => $row['CARDNO'],
+                    'card_no' => $row['CARDNO'],
                     'plate_no' => $row['PLATENO'],
                     'province_name' => $row['PROVINCE_NAME'],
                     'product_type' => $row['PRODUCT_TYPE'],
                     'status' => $row['STATUS'],
-                    'booth_date' => $row['BOOTHDATE'],
-                    'first_tare_date' => $row['FIRSTTAREDATE'],
-                    'gross_date' => $row['GROSSDATE']
+                    'booth_date' => $row['BOOTH_DATE'],
+                    'first_tare_date' => $row['FIRST_TARE_DATE'],
+                    'gross_date' => $row['GROSS_DATE']
                 ];
             }
             

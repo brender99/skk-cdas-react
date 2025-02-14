@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
-import { Table, Thead, Tbody, Tr, Th, Td } from '../../components/ui/Table'
+import { Table, Thead, Tbody, Tr, Th, Td, Tfoot } from '../../components/ui/Table'
 import { Search, FileText, FileSpreadsheet } from 'lucide-react'
 import { Truck } from 'lucide-react'
 import { PageHeader } from '../../components/ui/PageHeader'
@@ -16,7 +16,12 @@ const initialTrucks = [
     status: 'จองคิว',
     entryTime: '09:30',
     waitTime: '15 นาที',
-    plant: 'Plant 1'
+    plant: 'Plant 1',
+    boothdate: '2024-03-16T08:30:00',
+    grossdate: '2024-03-16T09:00:00',
+    weight: 10,
+    quantity: 20,
+    remark: 'Test remark'
   },
   {
     id: 'T002',
@@ -25,7 +30,12 @@ const initialTrucks = [
     status: 'ชั่งเบา',
     entryTime: '09:45',
     waitTime: '5 นาที',
-    plant: 'Plant 1'
+    plant: 'Plant 1',
+    boothdate: '2024-03-16T09:15:00',
+    grossdate: '2024-03-16T09:30:00',
+    weight: 15,
+    quantity: 30,
+    remark: 'Test remark 2'
   },
 ]
 
@@ -58,17 +68,20 @@ export default function TruckStatus() {
     // Implement export functionality
   }
 
+  const totalWeight = initialTrucks.reduce((acc, truck) => acc + (truck.weight || 0), 0)
+  const totalQuantity = initialTrucks.reduce((acc, truck) => acc + (truck.quantity || 0), 0)
+
   return (
     <div className="space-y-4">
       <PageHeader
-        title="สถานะรถ"
-        description="แสดงข้อมูลสถานะรถทั้งหมดในระบบ"
+        title="ข้อมูลรถ"
+        description="แสดงข้อมูลรถทั้งหมดในระบบ"
         icon={Truck}
       />
       {/* Filters */}
       <div className="bg-white p-4 rounded-lg shadow space-y-4">
         <form onSubmit={handleFilter} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="flex items-end gap-4">
             {/* Date Range */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">วันที่เริ่มต้น</label>
@@ -128,14 +141,13 @@ export default function TruckStatus() {
                 </select>
               </div>
             )}
-          </div>
 
-          <div className="flex justify-between items-center">
             <Button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2">
               <Search className="w-4 h-4" />
               ค้นหา
             </Button>
-            <div className="flex gap-2">
+
+            <div className="flex gap-2 ml-auto">
               <Button
                 type="button"
                 onClick={() => handleExport('pdf')}
@@ -158,45 +170,52 @@ export default function TruckStatus() {
       </div>
 
       {/* Transaction Table */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4">
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
           <Table>
             <Thead>
-              <Tr isHeader>
-                <Th>ทะเบียนรถ</Th>
-                <Th>ประเภทปูน</Th>
-                <Th>สถานะ</Th>
-                <Th>เวลาเข้า</Th>
-                <Th>เวลารอ</Th>
-                {userType === 'smk' && <Th>โรงงาน</Th>}
-                <Th>การดำเนินการ</Th>
+              <Tr>
+                <Th className="text-center w-16">ลำดับ</Th>
+                <Th className="text-center w-24">ทะเบียนรถ</Th>
+                <Th className="text-center w-24">ประเภทรถ</Th>
+                <Th className="text-center w-24">ประเภทปูน</Th>
+                <Th className="text-center w-24">สถานะ</Th>
+                <Th className="text-center w-32">เวลาเข้า</Th>
+                <Th className="text-center w-32">เวลาออก</Th>
+                <Th className="text-center w-24">น้ำหนัก (ตัน)</Th>
+                <Th className="text-center w-24">จำนวน (ถุง)</Th>
+                <Th className="text-center w-32">หมายเหตุ</Th>
               </Tr>
             </Thead>
             <Tbody>
               {initialTrucks.map((truck, index) => (
-                <Tr key={truck.id} isEven={index % 2 === 1}>
-                  <Td className="font-medium">{truck.plateNumber}</Td>
-                  <Td>{truck.type}</Td>
-                  <Td>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${statusColors[truck.status]}`}>
+                <Tr key={truck.id} className="hover:bg-gray-50">
+                  <Td className="text-center">{index + 1}</Td>
+                  <Td className="text-center font-medium">{truck.plateNumber}</Td>
+                  <Td className="text-center">{truck.type}</Td>
+                  <Td className="text-center">{truck.type}</Td>
+                  <Td className="text-center">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                      ${statusColors[truck.status] || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
                       {truck.status}
                     </span>
                   </Td>
-                  <Td>{truck.entryTime}</Td>
-                  <Td>{truck.waitTime}</Td>
-                  {userType === 'smk' && <Td>{truck.plant}</Td>}
-                  <Td>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="hover:bg-gray-100"
-                    >
-                      ดูรายละเอียด
-                    </Button>
-                  </Td>
+                  <Td className="text-center">{truck.boothdate}</Td>
+                  <Td className="text-center">{truck.grossdate}</Td>
+                  <Td className="text-center">{truck.weight || 0}</Td>
+                  <Td className="text-center">{truck.quantity || 0}</Td>
+                  <Td className="text-center">{truck.remark || ''}</Td>
                 </Tr>
               ))}
             </Tbody>
+            <Tfoot>
+              <Tr className="bg-gray-50 font-medium">
+                <Td colSpan={7} className="text-right">รวม</Td>
+                <Td className="text-center">{totalWeight}</Td>
+                <Td className="text-center">{totalQuantity}</Td>
+                <Td></Td>
+              </Tr>
+            </Tfoot>
           </Table>
         </div>
       </div>

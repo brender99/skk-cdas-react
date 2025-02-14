@@ -18,7 +18,7 @@ class WorkerController {
                         TYPE, 
                         UGROUP, 
                         COMPANY, 
-                        TO_CHAR(LASTUPDATE, 'DDMMRRRRHH24MISS') AS LASTUPDATE,
+                        TO_CHAR(LASTUPDATE, 'YYYY-MM-DD HH24:MI:SS') AS LASTUPDATE,
                         CASE 
                             WHEN LASTUPDATE IS NULL THEN 1
                             ELSE 0 
